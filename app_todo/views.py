@@ -10,7 +10,9 @@ from .forms import RegisterForm
 from .models import Task
 
 
-def homepageView(request):
+def homepage(request):
+    if request.user.is_authenticated:
+        return redirect('/tasks/')
     return render(request, 'app_todo/homepage.html')
 
 
@@ -20,7 +22,6 @@ class LoginsView(LoginView):
 
 class LogoutsView(LogoutView):
     template_name = 'app_todo/logout.html'
-
 
 def register_view(request):
     if request.method == 'POST':
@@ -38,6 +39,9 @@ class TaskListView(generic.ListView):
     model = Task
     template_name = 'app_todo/todolist.html'
     context_object_name = 'tasks'
+
+    def get_queryset(self):
+        return Task.objects.filter(user=self.request.user.id)
 
 
 class TaskDetailView(generic.DetailView):

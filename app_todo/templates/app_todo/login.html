@@ -1,15 +1,30 @@
 <!DOCTYPE html>
+{% extends "app_todo/homepage.html" %}
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <title>Вход в аккаунт</title>
 </head>
 <body>
+{% block body %}
     <h2>Вход в аккаунт</h2>
-    <form method="post">
-        {% csrf_token %}
-        {{ form.as_p }}
-        <button type="submit">Войти</button>
+    {% load bootstrap4 %}
+    {% bootstrap_css %}
+    {% bootstrap_javascript jquery='full' %}
+
+    {# Display django.contrib.messages as Bootstrap alerts #}
+    {% bootstrap_messages %}
+
+    {# Display a form #}
+    <form method="post" class="form">
+      {% csrf_token %}
+      {% bootstrap_form form %}
+      {% buttons %}
+        <button type="submit" class="btn btn-primary">
+          Войти
+        </button>
+      {% endbuttons %}
     </form>
+{% endblock %}
 </body>
 </html>

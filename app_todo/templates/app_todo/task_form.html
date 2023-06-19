@@ -1,14 +1,29 @@
 <!DOCTYPE html>
+{% extends "app_todo/homepage.html" %}
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <title>Title</title>
 </head>
 <body>
-<form action="/add_task/" method="post">{% csrf_token %}
-      {{ form.as_p }}
-      <input type="submit" value="Сохранить" />
-</form>
+{% block body %}
+    {% load bootstrap4 %}
+    {% bootstrap_css %}
+    {% bootstrap_javascript jquery='full' %}
 
+    {# Display django.contrib.messages as Bootstrap alerts #}
+    {% bootstrap_messages %}
+
+    {# Display a form #}
+    <form action="/add_task/" method="post" class="form">
+      {% csrf_token %}
+      {% bootstrap_form form %}
+      {% buttons %}
+        <button type="submit" class="btn btn-primary">
+          Сохранить
+        </button>
+      {% endbuttons %}
+    </form>
+{% endblock %}
 </body>
 </html>
