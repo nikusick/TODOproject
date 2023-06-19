@@ -1,7 +1,7 @@
 from django.urls import path
 
 from .views import TaskCreateView, TaskDeleteView, LoginsView, \
-    LogoutsView, register_view, homepage
+    LogoutsView, register_view, homepage, change_status
 
 urlpatterns = [
     path('', homepage),
@@ -10,5 +10,5 @@ urlpatterns = [
     path('login/', LoginsView.as_view()),
     path('logout/', LogoutsView.as_view()),
     path('register/', register_view),
-
+    path('update_task/', change_status),
 ]

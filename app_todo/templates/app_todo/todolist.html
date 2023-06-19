@@ -5,6 +5,13 @@
 <head>
     <meta charset="UTF-8">
     <title>Tasks</title>
+    {% block head %}
+        <script>
+            function changeSelection(id, status) {
+                window.location.replace("http://127.0.0.1:8000/update_task?id=" + id + '&status=' + status);
+            }
+        </script>
+    {% endblock %}
 </head>
 <body>
 {% block body %}
@@ -45,10 +52,12 @@
                     <li class="list-group-item d-flex align-items-center border-0 mb-2 rounded"
                         style="background-color: #f4f6f7;">
                         {% if task.complete %}
-                            <input class="form-check-input me-2" type="checkbox" value="" aria-label="..." checked/>
+                            <input class="form-check-input me-2" type="checkbox" onclick="changeSelection({{ task.id }}, this.checked)" value=""
+                                   aria-label="..." checked/>
                             <s>{{ task.name }}</s>
                         {% else %}
-                            <input class="form-check-input me-2" type="checkbox" value="" aria-label="..."/>
+                            <input class="form-check-input me-2" type="checkbox" onclick="changeSelection({{ task.id }}, this.checked)" value=""
+                                   aria-label="..."/>
                             {{ task.name }}
                         {% endif %}
                         <a type="button" class="btn-close" aria-label="Close" href="{{ task.id }}/delete"></a>
@@ -62,7 +71,8 @@
                     {% if not task.complete %}
                         <li class="list-group-item d-flex align-items-center border-0 mb-2 rounded"
                             style="background-color: #f4f6f7;">
-                            <input class="form-check-input me-2" type="checkbox" value="" aria-label="..."/>
+                            <input class="form-check-input me-2" type="checkbox" onclick="changeSelection({{ task.id }}, this.checked)" value=""
+                                   aria-label="..."/>
                             {{ task.name }}
                             <a type="button" class="btn-close" aria-label="Close" href="{{ task.id }}/delete"></a>
                         </li>
@@ -75,7 +85,8 @@
                 <li class="list-group-item d-flex align-items-center border-0 mb-2 rounded"
                     style="background-color: #f4f6f7;">
                     {% if task.complete %}
-                        <input class="form-check-input me-2" type="checkbox" value="" aria-label="..." checked/>
+                        <input class="form-check-input me-2" type="checkbox" onclick="changeSelection({{ task.id }}, this.checked)" value=""
+                               aria-label="..." checked/>
                         <s>{{ task.name }}</s>
                         <a type="button" class="btn-close" aria-label="Close" href="{{ task.id }}/delete"></a>
                     {% endif %}

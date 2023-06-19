@@ -1,3 +1,5 @@
+import json
+
 from django.contrib.auth import login
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.views import LoginView, LogoutView
@@ -52,15 +54,6 @@ class TaskCreateView(LoginRequiredMixin, CreateView):
         return super(TaskCreateView, self).get_context_data(**kwargs)
 
 
-class TaskUpdateView(LoginRequiredMixin, UpdateView):
-    model = Task
-    fields = ['name']
-    template_name = 'app_todo/update_task.html'
-    context_object_name = 'task'
-    success_url = '/'
-    login_url = '/login'
-
-
 class TaskDeleteView(LoginRequiredMixin, DeleteView):
     model = Task
     success_url = '/'
@@ -68,3 +61,8 @@ class TaskDeleteView(LoginRequiredMixin, DeleteView):
 
     def get(self, request, *args, **kwargs):
         return self.delete(request, *args, **kwargs)
+
+
+def change_status(request):
+    Task.objects.filter(id=request.GET['id']).update(complete=json.loads(request.GET['status']))
+    return redirect('/')
