@@ -1,30 +1,28 @@
 <!DOCTYPE html>
 {% extends "app_todo/homepage.html" %}
+
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Вход в аккаунт</title>
+    <title>Tasks</title>
 </head>
 <body>
 {% block body %}
-    <h2>Вход в аккаунт</h2>
-    {% load bootstrap4 %}
-    {% bootstrap_css %}
-    {% bootstrap_javascript jquery='full' %}
-
-    {# Display django.contrib.messages as Bootstrap alerts #}
-    {% bootstrap_messages %}
-
-    {# Display a form #}
-    <form method="post" class="form">
-      {% csrf_token %}
-      {% bootstrap_form form %}
-      {% buttons %}
-        <button type="submit" class="btn btn-primary">
-          Войти
-        </button>
-      {% endbuttons %}
-    </form>
+    <div class="text-center">
+        <h1>Welcome to TODO list site!</h1>
+        <h6>Here You can control your tasks! Please, sign in to continue.</h6>
+        <form method="post" class="form">
+            {% csrf_token %}
+            {{ form.as_p }}
+            <div class="row">
+                <button type="submit" class="btn btn-primary">Log In</button>
+            </div>
+        </form>
+        <br>
+        <div class="row">
+            <a class="btn btn-primary" href="/register/">Register</a>
+        </div>
+    </div>
 {% endblock %}
 </body>
 </html>

@@ -12,8 +12,8 @@ from .models import Task
 
 def homepage(request):
     if request.user.is_authenticated:
-        return redirect('/tasks/')
-    return render(request, 'app_todo/homepage.html')
+        return redirect('/tasks')
+    return redirect('/login')
 
 
 class LoginsView(LoginView):
@@ -21,7 +21,8 @@ class LoginsView(LoginView):
 
 
 class LogoutsView(LogoutView):
-    template_name = 'app_todo/logout.html'
+    success_url_allowed_hosts = '/'
+
 
 def register_view(request):
     if request.method == 'POST':
@@ -35,45 +36,35 @@ def register_view(request):
     return render(request, 'app_todo/register.html', {'form': form})
 
 
-class TaskListView(generic.ListView):
-    model = Task
-    template_name = 'app_todo/todolist.html'
-    context_object_name = 'tasks'
-
-    def get_queryset(self):
-        return Task.objects.filter(user=self.request.user.id)
-
-
-class TaskDetailView(generic.DetailView):
-    model = Task
-    template_name = 'app_todo/task.html'
-    context_object_name = 'task'
-
-
 class TaskCreateView(LoginRequiredMixin, CreateView):
     model = Task
-    fields = ['name', 'details', 'stop_day']
+    fields = ['name']
+    template_name = 'app_todo/todolist.html'
     success_url = '../'
-    login_url = '/login/'
-
-    def get_form(self, form_class=None):
-        form = super(TaskCreateView, self).get_form(form_class)
-        form.fields['stop_day'].widget = AdminDateWidget(attrs={'type': 'date'})
-        return form
+    login_url = '/login'
 
     def form_valid(self, form):
         form.instance.user = self.request.user
         return super().form_valid(form)
 
+    def get_context_data(self, **kwargs):
+        kwargs['task_list'] = Task.objects.filter(user=self.request.user.id)
+        return super(TaskCreateView, self).get_context_data(**kwargs)
+
 
 class TaskUpdateView(LoginRequiredMixin, UpdateView):
     model = Task
-    fields = ['name', 'details', 'stop_day']
-    success_url = '../'
-    login_url = '/login/'
+    fields = ['name']
+    template_name = 'app_todo/update_task.html'
+    context_object_name = 'task'
+    success_url = '/'
+    login_url = '/login'
 
 
 class TaskDeleteView(LoginRequiredMixin, DeleteView):
     model = Task
-    success_url = '../'
-    login_url = '/login/'
+    success_url = '/'
+    login_url = '/login'
+
+    def get(self, request, *args, **kwargs):
+        return self.delete(request, *args, **kwargs)
